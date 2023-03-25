@@ -16,7 +16,7 @@ public class ExpressionCalc {
     public String calculadora(String expression) {
         if (expression.contains("/") || expression.contains("*")){
             expression = calcularDivMult(expression);
-            expression = calculadora(expression);
+            // expression = calculadora(expression);
         }
 
         expression = calcularSomaSubtracao(expression);
@@ -61,17 +61,36 @@ public class ExpressionCalc {
 
     public String calcularDivMult(String expression) {
         Double result = 0.0;
+        String resultString = "";
         Pattern pattern = Pattern.compile("[+-]?[0-9]+\\.?[0-9]*[\\/\\*]+[+-]?[0-9]+\\.?[0-9]*");
         Matcher matcher = pattern.matcher(expression);
         matcher.find();  
         if (matcher.group().contains("/")){
             String partes[] = matcher.group().split("/");
             result = Double.parseDouble(partes[0]) / Double.parseDouble(partes[1]);
-            expression = expression.replace(matcher.group(), Double.toString(result));
+            //necessário esse bloco de if else pois o resultado pode dar positivo
+            //e quando isso acontece a string não iria possuir o sinal.
+            if (result >= 0) {
+                resultString = "+" + Double.toString(result);
+            }else {
+                resultString = Double.toString(result);
+            }
+            expression = expression.replace(matcher.group(), resultString);
         }else {
             String partes[] = matcher.group().split("\\*");
             result = Double.parseDouble(partes[0]) * Double.parseDouble(partes[1]);
-            expression = expression.replace(matcher.group(), Double.toString(result));
+            //necessário esse bloco de if else pois o resultado pode dar positivo
+            //e quando isso acontece a string não iria possuir o sinal.
+            if (result >= 0) {
+                resultString = "+" + Double.toString(result);
+            }else {
+                resultString = Double.toString(result);
+            }
+            expression = expression.replace(matcher.group(), resultString);
+        }
+
+        if (expression.contains("/") || expression.contains("*")){
+            expression = calcularDivMult(expression);
         }
         return expression;
     }

@@ -13,7 +13,7 @@ public class Testes {
         
         // System.out.println(e.calcularSomaSubtracao("1+10"));
         // e.calcularDivMult("2*2");
-        System.out.println("=========" + e.calculadora("10/2/2"));
+        System.out.println("=========" + e.calculadora("-10/-2*5"));
         
     }
     
