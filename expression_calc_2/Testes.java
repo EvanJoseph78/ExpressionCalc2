@@ -11,7 +11,10 @@ public class Testes {
 
         ExpressionCalc e = new ExpressionCalc();
         
-        System.out.println(e.calcularSomaSubtracao("100+200+122"));
+        // System.out.println(e.calcularSomaSubtracao("1+10"));
+        // e.calcularDivMult("2*2");
+        System.out.println("=========" + e.calculadora("10/2/2"));
+        
     }
     
     

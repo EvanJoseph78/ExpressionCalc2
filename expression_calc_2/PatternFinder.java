@@ -30,11 +30,9 @@ public class PatternFinder{
         if(matcher.find()) {
             return matcher.group();    
         }
-        
-        return "a expressão8 não bateu";
 
+        return "a expressão8 não bateu";
        
-        
     }
 
 }
