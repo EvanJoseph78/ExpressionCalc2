@@ -2,6 +2,7 @@ package expression_calc_2;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.lang.Math;
 
 public class ExpressionCalc {
 
@@ -13,12 +14,22 @@ public class ExpressionCalc {
      */
 
     public String calculadora(String expression) {
+        if (expression.contains("^")) {
+            expression = exponenciation(expression);
+        }
+
         if (expression.contains("(")) {
             expression = resolveParenteis(expression);
         }
 
         if (expression.contains("/") || expression.contains("*")) {
             expression = calcularDivMult(expression);
+        }
+
+        if (expression.equals("Invalid Expression: Divisão por zero!") ||
+                expression.equals("Infinity") ||
+                expression.equals("Undefined")) {
+            return expression;
         }
 
         expression = calcularSomaSubtracao(expression);
@@ -67,9 +78,17 @@ public class ExpressionCalc {
         Matcher matcher = pattern.matcher(expression);
         matcher.find();
         if (matcher.group().contains("/")) {
+
             String partes[] = matcher.group().split("/");
+
             result = Double.parseDouble(partes[0]) / Double.parseDouble(partes[1]);
 
+            if (Double.isNaN(result)) {
+                return "Invalid Expression: Divisão por zero!";
+            }
+            if (Double.isInfinite(result)) {
+                return "Infinity";
+            }
             // necessário esse bloco de if else pois o resultado pode dar positivo
             // e quando isso acontece a string não iria possuir o sinal.
 
@@ -108,7 +127,7 @@ public class ExpressionCalc {
     /**
      * @param expression
      * @return string
-     * resolve os parentesis como prioridade
+     *         resolve os parentesis como prioridade
      */
 
     public String resolveParenteis(String expression) {
@@ -123,13 +142,43 @@ public class ExpressionCalc {
 
             expression = expression.replace(matcher.group(), calculadora(parteExpression));
 
-            // se ainda houver parentesis a serem resolvidos a função é chamada novamente 
-            // recursivamente 
+            // se ainda houver parentesis a serem resolvidos a função é chamada novamente
+            // recursivamente
             return resolveParenteis(expression);
 
         }
 
         expression = calculadora(expression);
+
+        return expression;
+    }
+
+    public String exponenciation(String expression) {
+        Double result = 0.0;
+        String resultString = "";
+        Pattern pattern = Pattern.compile("[+-]?[0-9]+\\.?[0-9]*[\\^]+[+-]?[0-9]+\\.?[0-9]*");
+        Matcher matcher = pattern.matcher(expression);
+        matcher.find();
+
+        String partes[] = matcher.group().split("\\^");
+
+        if (Double.parseDouble(partes[0]) == 0 && Double.parseDouble(partes[1]) == 0) {
+            return "Undefined";
+        }
+
+        result = Math.pow(Double.parseDouble(partes[0]), Double.parseDouble(partes[1]));
+
+        if (result >= 0) {
+            resultString = "+" + Double.toString(result);
+        } else {
+            resultString = Double.toString(result);
+        }
+
+        expression = expression.replace(matcher.group(), resultString);
+
+        if (expression.contains("^")) {
+            expression = calcularDivMult(expression);
+        }
 
         return expression;
     }

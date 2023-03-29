@@ -17,7 +17,8 @@ public class Testes {
         // e.calcularDivMult("2*2");
         // System.out.println("Teste 1 = " + e.calculadora("-10/-2*5"));
         // System.out.println("Teste 2 = " + e.calculadora("-3*4/3+5"));
-        String teste = e.resolveParenteis("(2+1/(2+(3*(2+2))))+(2+2/2)");
+
+        String teste = e.resolveParenteis("1/2*(3^2)+2^(2+2^2)");
         System.out.println(teste);
 
     }
